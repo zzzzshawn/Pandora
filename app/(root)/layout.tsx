@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import DotPattern from "@/components/ui/dot-pattern";
 import { cn } from "@/lib/utils";
+import { Toaster } from "sonner";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -11,6 +12,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           "-z-[0] [mask-image:radial-gradient(600px_circle_at_center,white,transparent)]"
         )}
       />
+      <Toaster />
       {children}
     </main>
   );

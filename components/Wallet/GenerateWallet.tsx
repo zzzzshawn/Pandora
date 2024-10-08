@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { generateMnemonic } from "bip39";
+import { generateMnemonic, validateMnemonic } from "bip39";
 import {
   Accordion,
   AccordionContent,
@@ -10,6 +10,9 @@ import {
 } from "@/components/ui/accordion";
 import GenerateSolWallet from "@/app/(root)/solwallet/GenerateSolWallet";
 import GenerateEthWallet from "@/app/(root)/ethwallet/GenerateEthWallet";
+import { Input } from "../ui/input";
+import { motion } from "framer-motion";
+import { toast } from "sonner";
 
 interface WalletProps {
   wallet: string;
@@ -18,6 +21,9 @@ interface WalletProps {
 const GenerateWallet = ({ wallet }: WalletProps) => {
   const [solMnemonic, setSolMnemonic] = useState("");
   const [ethMnemonic, setEthMnemonic] = useState("");
+  const [showMnemonicInput, setShowMnemonicInput] = useState(false);
+  const [solInput, setSolInput ] = useState("");
+  const [ethInput, setEthInput] = useState("");
 
   const getMnemonic = async () => {
     const secretPhrase = await generateMnemonic();
@@ -44,17 +50,63 @@ const GenerateWallet = ({ wallet }: WalletProps) => {
     }
   }, []);
 
+  const handleRecover = () => {
+    if(wallet === "solana"){
+      if(validateMnemonic(solInput)){
+        setSolMnemonic(solInput)
+        localStorage.setItem("SolMnemonic", solInput)
+        localStorage.setItem("SolWallets", "");
+        setSolInput("")
+        toast.success('Seed phrase Valid')
+      }else{
+        toast.info('Seed phrase not valid')
+      }
+    } else if(wallet == "ethereum"){
+      if(validateMnemonic(ethInput)){
+        setEthMnemonic(ethInput)
+        localStorage.setItem("EthMnemonic", ethInput)
+        localStorage.setItem("EthWallets", "");
+        setEthInput("")
+        toast.success('Seed phrase Valid')
+      }else{
+        toast.info('Seed phrase not valid')
+      }
+    }
+  }
+
   return (
     <div className="flex items-start justify-start gap-3 py-1 flex-col">
-      <div className=" flex gap-3 mt-3 w-full justify-start">
-        <Button
-          onClick={() => getMnemonic()}
-          disabled={wallet === "solana" ? !!solMnemonic : !!ethMnemonic}
-          className={`bg-white text-black ${wallet == "solana" && solMnemonic ? "hidden" : ""} ${wallet === "ethereum" && ethMnemonic ? "hidden": ""}`}
-        >
-          Generate Wallet
-        </Button>
-        <Button className="bg-white text-black">Recover Wallet</Button>
+      <div className=" flex gap-3 mt-3 w-full justify-start flex-col">
+        <div className="flex items-center justify-start gap-3">
+          <Button
+            onClick={() => getMnemonic()}
+            disabled={wallet === "solana" ? !!solMnemonic : !!ethMnemonic}
+            className={`bg-white text-black hover:text-white ${
+              wallet == "solana" && solMnemonic ? "hidden" : ""
+            } ${wallet === "ethereum" && ethMnemonic ? "hidden" : ""}`}
+          >
+            Generate Wallet
+          </Button>
+          <Button onClick={()=>{setShowMnemonicInput(!showMnemonicInput)}} className="bg-white text-black hover:text-white">Recover Wallet</Button>
+        </div>
+        <motion.div 
+        initial={{opacity: 0, y: -20, display: "none"}}
+        animate={showMnemonicInput ? {opacity: 1, y: 0, display: "flex"}: {opacity: 0, y: -20, display: "none"}}
+        className="w-full mt-2 flex items-center justify-center gap-2">
+          <Input
+            onChange={(e) => {
+              if (wallet === "solana") {
+                setSolInput(e.target.value); 
+              } else if (wallet === "ethereum") {
+                setEthInput(e.target.value);
+              }
+            }}
+            value={wallet === "solana" ? solInput : ethInput}
+            placeholder="Enter your seed phrase"
+            className="border-white/50 "
+          />
+          <Button className="bg-white text-black hover:text-white" onClick={handleRecover}>Recover</Button>
+        </motion.div>
       </div>
 
       {wallet === "solana" && solMnemonic && (

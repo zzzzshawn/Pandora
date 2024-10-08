@@ -61,10 +61,8 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
   };
 
   useEffect(() => {
-    const exists: string | null = localStorage.getItem("Mnemonic");
     const walletExists: string | null = localStorage.getItem("SolWallets");
-    console.log(exists);
-    if (!exists || walletExists?.length === 0 || walletExists === undefined) {
+    if (walletExists?.length === 0 || walletExists === undefined) {
       generateWallet();
     }
   }, []);
