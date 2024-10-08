@@ -1,13 +1,10 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { mnemonicToSeed } from "bip39";
-import { derivePath } from "ed25519-hd-key";
-import { Keypair } from "@solana/web3.js";
-import nacl from "tweetnacl";
 import { Button } from "@/components/ui/button";
+import { mnemonicToSeed } from "bip39";
+import { Wallet } from "ethers";
+import { HDNodeWallet } from "ethers";
 import { Eye, Trash } from "lucide-react";
-import bs58 from "bs58";
 import Image from "next/image";
+import React, { useEffect, useState } from "react";
 
 interface Props {
   mnemonic: string;
@@ -19,13 +16,13 @@ interface KeypairData {
   privateKey: string;
 }
 
-const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
+const GenerateEthWallet = ({ mnemonic, setMnemonic }: Props) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [keypairs, setKeypairs] = useState<KeypairData[]>([]);
   const [showPrivateKey, setShowPrivateKey] = useState<boolean[]>([]);
 
   useEffect(() => {
-    const storedWallets = localStorage.getItem("SolWallets");
+    const storedWallets = localStorage.getItem("EthWallets");
 
     if (storedWallets) {
       setKeypairs(JSON.parse(storedWallets));
@@ -33,49 +30,49 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
     }
   }, []);
 
-  const generateWallet = async () => {
+  const generateEthWallet = async () => {
     const seed = await mnemonicToSeed(mnemonic);
-    const path = `m/44'/501'/${currentIndex}'/0'`;
-    const derivedSeed = derivePath(path, seed.toString("hex")).key;
-    const secret = nacl.sign.keyPair.fromSeed(derivedSeed).secretKey;
+    const derivationPath = `m/44'/60'/${currentIndex}'/0'`;
+    const hdNode = HDNodeWallet.fromSeed(seed);
+    const child = hdNode.derivePath(derivationPath);
+    const privateKey = child.privateKey;
+    const wallet = new Wallet(privateKey);
 
-    const keypair = Keypair.fromSecretKey(secret);
-
-    const newKeypair = {
-      publicKey: keypair.publicKey.toBase58(),
-      privateKey: bs58.encode(keypair.secretKey),
+    const newWallet = {
+      publicKey: wallet.address,
+      privateKey: wallet.privateKey,
     };
 
+    // Store in localStorage
     const storedWallets = JSON.parse(
-      localStorage.getItem("SolWallets") || "[]"
+      localStorage.getItem("EthWallets") || "[]"
     );
+    const updatedWallets = [...storedWallets, newWallet];
+    localStorage.setItem("EthWallets", JSON.stringify(updatedWallets));
 
-    const updatedWallets = [...storedWallets, newKeypair];
-    console.log(updatedWallets);
-
-    localStorage.setItem("SolWallets", JSON.stringify(updatedWallets));
-
-    setKeypairs((prevKeypairs) => [...prevKeypairs, newKeypair]);
+    setKeypairs(updatedWallets);
     setShowPrivateKey((prevKeys) => [...prevKeys, false]);
     setCurrentIndex((prevIndex) => prevIndex + 1);
   };
 
   useEffect(() => {
     const exists: string | null = localStorage.getItem("Mnemonic");
-    const walletExists: string | null = localStorage.getItem("SolWallets");
+    const walletExists: string | null = localStorage.getItem("EthWallets");
     console.log(exists);
     if (!exists || walletExists?.length === 0 || walletExists === undefined) {
-      generateWallet();
+      generateEthWallet();
     }
   }, []);
 
   const handleWalletDelete = (index: number) => {
     const storedWallets = JSON.parse(
-      localStorage.getItem("SolWallets") || "[]"
+      localStorage.getItem("EthWallets") || "[]"
     );
 
-    const updatedWallets = storedWallets.filter((_: KeypairData, i: number) => i !== index);
-    localStorage.setItem("SolWallets", JSON.stringify(updatedWallets));
+    const updatedWallets = storedWallets.filter(
+      (_: KeypairData, i: number) => i !== index
+    );
+    localStorage.setItem("EthWallets", JSON.stringify(updatedWallets));
 
     setKeypairs(updatedWallets);
     setShowPrivateKey((prevKeys) => prevKeys.filter((_, i) => i !== index));
@@ -88,13 +85,13 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
   };
 
   const clear = () => {
-    localStorage.removeItem("SolWallets");
-    localStorage.removeItem("SolMnemonic");
-    setMnemonic("")
-    setKeypairs([])
-    setShowPrivateKey([])
-    setCurrentIndex(0)
-  }
+    localStorage.removeItem("EthWallets");
+    localStorage.removeItem("EthMnemonic");
+    setMnemonic("");
+    setKeypairs([]);
+    setShowPrivateKey([]);
+    setCurrentIndex(0);
+  };
 
   return (
     <div className="w-full flex flex-col gap-5 mt-5">
@@ -102,7 +99,7 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
         <h2 className="text-5xl">Your Wallets</h2>
         <div className="flex items-center gap-2">
           <Button
-            onClick={() => generateWallet()}
+            onClick={() => generateEthWallet()}
             className="bg-white text-black hover:text-white"
           >
             Add Wallet
@@ -124,11 +121,11 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
             <div className="flex items-center justify-between">
               <div className="flex items-end gap-2  ">
                 <Image
-                  src={`/solana.png`}
+                  src={`/eth.png`}
                   alt=""
                   width={1024}
                   height={1024}
-                  className="size-10"
+                  className="size-9"
                 />
                 <h1 className="text-2xl leading-8">Wallet {index + 1}</h1>
               </div>
@@ -164,4 +161,4 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
   );
 };
 
-export default GenerateSolWallet;
+export default GenerateEthWallet;
