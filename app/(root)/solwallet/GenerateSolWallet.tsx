@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Eye, Trash } from "lucide-react";
 import bs58 from "bs58";
 import Image from "next/image";
-
+import { motion } from "framer-motion";
 interface Props {
   mnemonic: string;
   setMnemonic: (mnemonic: string) => void;
@@ -72,7 +72,9 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
       localStorage.getItem("SolWallets") || "[]"
     );
 
-    const updatedWallets = storedWallets.filter((_: KeypairData, i: number) => i !== index);
+    const updatedWallets = storedWallets.filter(
+      (_: KeypairData, i: number) => i !== index
+    );
     localStorage.setItem("SolWallets", JSON.stringify(updatedWallets));
 
     setKeypairs(updatedWallets);
@@ -88,15 +90,20 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
   const clear = () => {
     localStorage.removeItem("SolWallets");
     localStorage.removeItem("SolMnemonic");
-    setMnemonic("")
-    setKeypairs([])
-    setShowPrivateKey([])
-    setCurrentIndex(0)
-  }
+    setMnemonic("");
+    setKeypairs([]);
+    setShowPrivateKey([]);
+    setCurrentIndex(0);
+  };
 
   return (
     <div className="w-full flex flex-col gap-5 mt-5">
-      <div className="w-full flex items-center justify-between">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.5 }}
+        className="w-full flex items-center justify-between"
+      >
         <h2 className="text-5xl">Your Wallets</h2>
         <div className="flex items-center gap-2">
           <Button
@@ -112,8 +119,12 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
             Clear Wallets
           </Button>
         </div>
-      </div>
-      <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
+      </motion.div>
+      <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: 0.75 }}
+      className="grid md:grid-cols-2 grid-cols-1 gap-5">
         {keypairs.map((keypair, index) => (
           <div
             key={index}
@@ -157,7 +168,7 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
             </div>
           </div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 };

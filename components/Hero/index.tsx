@@ -8,7 +8,7 @@ import Link from "next/link";
 
 const Hero = () => {
   return (
-    <div className="relative w-full  flex flex-col items-center justify-start lg:py-[10%] py-[20%] text-white h-screen">
+    <div className="relative w-full  flex flex-col items-center justify-center lg:py-[10%] py-[20%] text-white h-screen">
       <HalfCircleGradient position="bottom" />
 
       <motion.div
