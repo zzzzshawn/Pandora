@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { Button } from "../ui/button";
-import { ArrowTopRightIcon } from "@radix-ui/react-icons";
+import { ArrowTopRightIcon, GitHubLogoIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 
 export default function Navbar() {
@@ -17,12 +17,17 @@ export default function Navbar() {
           Pandora
         </h2>
       </div>
-      <Link href="/">
-        <Button className="bg-black text-white w-max  gap-0.5 flex items-center justify-center rounded-full hover:bg-dark-4 ">
-          <p className="font-glancyr">home</p>
-          <ArrowTopRightIcon className="size-full" />
-        </Button>
-      </Link>
+      <div className="flex items-center justify-center gap-5">
+        <Link href="https://github.com/zzzzshawn/Pandora" target="_blank" className="flex items-center justify-center">
+          <GitHubLogoIcon className="text-black size-8" />
+        </Link>
+        <Link href="/">
+          <Button className="bg-black text-white w-max  gap-0.5 flex items-center justify-center rounded-full hover:bg-dark-4 ">
+            <p className="font-glancyr">home</p>
+            <ArrowTopRightIcon className="size-full" />
+          </Button>
+        </Link>
+      </div>
     </motion.nav>
   );
 }
