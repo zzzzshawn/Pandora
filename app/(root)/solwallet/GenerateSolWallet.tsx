@@ -9,6 +9,7 @@ import { Eye, Trash } from "lucide-react";
 import bs58 from "bs58";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 interface Props {
   mnemonic: string;
   setMnemonic: (mnemonic: string) => void;
@@ -58,6 +59,7 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
     setKeypairs((prevKeypairs) => [...prevKeypairs, newKeypair]);
     setShowPrivateKey((prevKeys) => [...prevKeys, false]);
     setCurrentIndex((prevIndex) => prevIndex + 1);
+    toast.success('Wallet created')
   };
 
   useEffect(() => {
@@ -79,6 +81,7 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
 
     setKeypairs(updatedWallets);
     setShowPrivateKey((prevKeys) => prevKeys.filter((_, i) => i !== index));
+    toast.success('Wallet deleted')
   };
 
   const togglePrivateKeyVisibility = (index: number) => {
@@ -95,6 +98,15 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
     setShowPrivateKey([]);
     setCurrentIndex(0);
   };
+
+  const handleClear = () =>{
+    toast.warning('Are you sure you want to delete all your wallets?',{
+      action: {
+        label: 'Delete',
+        onClick: () => clear()
+      }
+    })
+  }
 
   return (
     <div className="w-full flex flex-col gap-5 mt-5">
@@ -113,7 +125,7 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
             Add Wallet
           </Button>
           <Button
-            onClick={() => clear()}
+            onClick={() => handleClear()}
             className="bg-white text-black hover:text-white"
           >
             Clear Wallets

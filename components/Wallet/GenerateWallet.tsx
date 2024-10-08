@@ -31,10 +31,12 @@ const GenerateWallet = ({ wallet }: WalletProps) => {
       localStorage.setItem("SolMnemonic", secretPhrase);
       localStorage.setItem("SolWallets", "");
       setSolMnemonic(secretPhrase);
+      toast.success('Seed phrase generated')
     } else if (wallet === "ethereum") {
       localStorage.setItem("EthMnemonic", secretPhrase);
       localStorage.setItem("EthWallets", "");
       setEthMnemonic(secretPhrase);
+      toast.success('Seed phrase generated')
     }
   };
 

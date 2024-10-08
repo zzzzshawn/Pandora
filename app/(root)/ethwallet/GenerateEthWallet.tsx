@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Eye, Trash } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 interface Props {
   mnemonic: string;
   setMnemonic: (mnemonic: string) => void;
@@ -54,6 +55,7 @@ const GenerateEthWallet = ({ mnemonic, setMnemonic }: Props) => {
     setKeypairs(updatedWallets);
     setShowPrivateKey((prevKeys) => [...prevKeys, false]);
     setCurrentIndex((prevIndex) => prevIndex + 1);
+    toast.success('Wallet created')
   };
 
   useEffect(() => {
@@ -75,6 +77,7 @@ const GenerateEthWallet = ({ mnemonic, setMnemonic }: Props) => {
 
     setKeypairs(updatedWallets);
     setShowPrivateKey((prevKeys) => prevKeys.filter((_, i) => i !== index));
+    toast.success('Wallet deleted')
   };
 
   const togglePrivateKeyVisibility = (index: number) => {
@@ -90,6 +93,15 @@ const GenerateEthWallet = ({ mnemonic, setMnemonic }: Props) => {
     setKeypairs([]);
     setShowPrivateKey([]);
     setCurrentIndex(0);
+  };
+
+  const handleClear = () => {
+    toast.warning("Are you sure you want to delete all your wallets?", {
+      action: {
+        label: "Delete",
+        onClick: () => clear(),
+      },
+    });
   };
 
   return (
@@ -109,7 +121,7 @@ const GenerateEthWallet = ({ mnemonic, setMnemonic }: Props) => {
             Add Wallet
           </Button>
           <Button
-            onClick={() => clear()}
+            onClick={() => handleClear()}
             className="bg-white text-black hover:text-white"
           >
             Clear Wallets
@@ -117,10 +129,11 @@ const GenerateEthWallet = ({ mnemonic, setMnemonic }: Props) => {
         </div>
       </motion.div>
       <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay: 0.75 }}
-      className="grid md:grid-cols-2 grid-cols-1 gap-5">
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.75 }}
+        className="grid md:grid-cols-2 grid-cols-1 gap-5"
+      >
         {keypairs.map((keypair, index) => (
           <div
             key={index}
