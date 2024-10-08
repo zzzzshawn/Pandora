@@ -32,12 +32,16 @@ const GenerateWallet = ({ wallet }: WalletProps) => {
       localStorage.setItem("SolMnemonic", secretPhrase);
       localStorage.setItem("SolWallets", "");
       setSolMnemonic(secretPhrase);
-      toast.success("Seed phrase generated");
+      toast.success("Seed phrase generated",{
+        duration: 2500
+    });
     } else if (wallet === "ethereum") {
       localStorage.setItem("EthMnemonic", secretPhrase);
       localStorage.setItem("EthWallets", "");
       setEthMnemonic(secretPhrase);
-      toast.success("Seed phrase generated");
+      toast.success("Seed phrase generated",{
+        duration: 2500
+    });
     }
   };
 
@@ -60,9 +64,13 @@ const GenerateWallet = ({ wallet }: WalletProps) => {
         localStorage.setItem("SolMnemonic", solInput);
         localStorage.setItem("SolWallets", "");
         setSolInput("");
-        toast.success("Seed phrase Valid");
+        toast.success("Seed phrase Valid",{
+          duration: 2500
+      });
       } else {
-        toast.info("Seed phrase not valid");
+        toast.info("Seed phrase not valid",{
+          duration: 2500
+      });
       }
     } else if (wallet == "ethereum") {
       if (validateMnemonic(ethInput)) {
@@ -70,9 +78,13 @@ const GenerateWallet = ({ wallet }: WalletProps) => {
         localStorage.setItem("EthMnemonic", ethInput);
         localStorage.setItem("EthWallets", "");
         setEthInput("");
-        toast.success("Seed phrase Valid");
+        toast.success("Seed phrase Valid",{
+          duration: 2500
+      });
       } else {
-        toast.info("Seed phrase not valid");
+        toast.info("Seed phrase not valid",{
+          duration: 2500
+      });
       }
     }
   };
@@ -81,16 +93,20 @@ const GenerateWallet = ({ wallet }: WalletProps) => {
     navigator.clipboard
       .writeText(mnemonic)
       .then(() => {
-        toast.success("Secret phrase copied to clipboard");
+        toast.success("Secret phrase copied to clipboard",{
+          duration: 2500
+      });
       })
       .catch(() => {
-        toast.error("Failed to copy secret phrase");
+        toast.error("Failed to copy secret phrase",{
+          duration: 2500
+      });
       });
   };
 
   return (
-    <div className="flex items-start justify-start gap-3 py-1 flex-col">
-      <div className=" flex gap-3 mt-3 w-full justify-start flex-col">
+    <div className="flex items-start justify-start gap-3 py-3 flex-col">
+      <div className=" flex gap-3 w-full justify-start flex-col">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -163,18 +179,18 @@ const GenerateWallet = ({ wallet }: WalletProps) => {
                 onClick={() => handleCopyToClipboard(solMnemonic)}
                 className="bg-black flex flex-col"
               >
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 gap-2 max-sm:gap-1">
                   {solMnemonic.split(" ").map((item) => (
                     <p
                       key={item}
-                      className="border border-dark-4 text-base text-white w-full p-2 text-center uppercase rounded-lg cursor-pointer hover:bg-white bg-black z-10 hover:text-black transition-all"
+                      className="border border-dark-4 text-base text-white w-full p-2 text-center uppercase rounded-lg cursor-pointer hover:bg-white bg-black z-10 hover:text-black transition-all max-sm:text-xs line-clamp-1 overflow-hidden"
                     >
                       {item}
                     </p>
                   ))}
                 </div>
-                <div className="flex items-center justify-start gap-1 text-zinc-600 mt-3">
-                  <Copy className="w-4" />
+                <div className="flex items-center justify-start gap-1 text-zinc-600 mt-3 max-sm:text-xs">
+                  <Copy className="w-4 max-sm:w-3" />
                   <p>Click anywhere on the phrases to copy.</p>
                 </div>
               </AccordionContent>
@@ -199,18 +215,18 @@ const GenerateWallet = ({ wallet }: WalletProps) => {
                 onClick={() => handleCopyToClipboard(ethMnemonic)}
                 className="bg-black flex flex-col "
               >
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 gap-2 max-sm:gap-1">
                   {ethMnemonic.split(" ").map((item) => (
                     <p
                       key={item}
-                      className="border border-dark-4 text-base text-white w-full p-2 text-center uppercase rounded-lg cursor-pointer hover:bg-white bg-black z-10 hover:text-black transition-all"
+                      className="border border-dark-4 text-base text-white w-full p-2 text-center uppercase rounded-lg cursor-pointer hover:bg-white bg-black z-10 hover:text-black transition-all max-sm:text-xs line-clamp-1 overflow-hidden"
                     >
                       {item}
                     </p>
                   ))}
                 </div>
-                <div className="flex items-center justify-start gap-1 text-zinc-600 mt-3">
-                  <Copy className="w-4" />
+                <div className="flex items-center justify-start gap-1 text-zinc-600 mt-3 max-sm:text-xs">
+                  <Copy className="w-4 max-sm:w-3" />
                   <p>Click anywhere on the phrases to copy.</p>
                 </div>
               </AccordionContent>

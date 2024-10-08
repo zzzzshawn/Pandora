@@ -23,7 +23,7 @@ const Hero = () => {
           transition={{ duration: 0.8, delay: 0 }}
           className="w-full max-w-lg"
         >
-          <h1 className="text-center text-[7rem] font-glancyr700 leading-[5rem] max-sm:text-[12px]">
+          <h1 className="text-center text-[7rem] font-glancyr700 leading-[5rem] max-sm:text-[4rem] max-sm:leading-[3.8rem]">
             Pandora
           </h1>
         </motion.div>
@@ -34,7 +34,7 @@ const Hero = () => {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="w-full max-w-lg"
         >
-          <p className="text-center font-glancyr max-sm:text-[12px] text-[1.5rem] leading-tight">
+          <p className="text-center font-glancyr max-sm:text-[1rem] text-[1.5rem] leading-tight">
             Your Gateway to Effortless Wallet Creation
           </p>
         </motion.div>
@@ -45,7 +45,7 @@ const Hero = () => {
           transition={{ duration: 0.8, delay: 0.75 }}
           className="w-full max-w-lg"
         >
-          <p className="text-center font-glancyr max-sm:text-[12px] mt-3">
+          <p className="text-center font-glancyr max-sm:text-[1rem] mt-3">
             Get started with:
           </p>
         </motion.div>
@@ -57,13 +57,13 @@ const Hero = () => {
           className="w-full flex items-center justify-center gap-3 mt-2"
         >
           <Link href={`/solwallet`}>
-            <Button className="bg-white text-black w-max max-sm:hidden gap-0.5 flex items-center justify-center rounded-full hover:bg-black hover:text-white">
+            <Button className="bg-white text-black w-max gap-0.5 flex items-center justify-center rounded-full hover:bg-black hover:text-white">
               <p className="font-glancyr">Solana</p>
               <ArrowTopRightIcon className="size-full" />
             </Button>
           </Link>
           <Link href={`/ethwallet`}>
-            <Button className="bg-white text-black w-max max-sm:hidden gap-0.5 flex items-center justify-center rounded-full hover:bg-black hover:text-white">
+            <Button className="bg-white text-black w-max gap-0.5 flex items-center justify-center rounded-full hover:bg-black hover:text-white">
               <p className="font-glancyr">Ethereum</p>
               <ArrowTopRightIcon className="size-full" />
             </Button>

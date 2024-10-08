@@ -59,7 +59,9 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
     setKeypairs((prevKeypairs) => [...prevKeypairs, newKeypair]);
     setShowPrivateKey((prevKeys) => [...prevKeys, false]);
     setCurrentIndex((prevIndex) => prevIndex + 1);
-    toast.success("Wallet created");
+    toast.success("Wallet created", {
+      duration: 2500,
+    });
   };
 
   useEffect(() => {
@@ -81,7 +83,9 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
 
     setKeypairs(updatedWallets);
     setShowPrivateKey((prevKeys) => prevKeys.filter((_, i) => i !== index));
-    toast.success("Wallet deleted");
+    toast.success("Wallet deleted", {
+      duration: 2500,
+    });
   };
 
   const togglePrivateKeyVisibility = (index: number) => {
@@ -105,6 +109,7 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
         label: "Delete",
         onClick: () => clear(),
       },
+      duration: 2500,
     });
   };
 
@@ -112,10 +117,14 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
     navigator.clipboard
       .writeText(key)
       .then(() => {
-        toast.success("Copied to clipboard");
+        toast.success("Copied to clipboard",{
+          duration: 2500
+      });
       })
       .catch(() => {
-        toast.error("Failed to copy key");
+        toast.error("Failed to copy key",{
+          duration: 2500
+      });
       });
   };
 
@@ -125,7 +134,7 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.5 }}
-        className="w-full flex items-center justify-between"
+        className="w-full flex items-center justify-between max-sm:flex-col"
       >
         <h2 className="text-5xl">Your Wallets</h2>
         <div className="flex items-center gap-2">
