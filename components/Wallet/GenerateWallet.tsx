@@ -13,6 +13,7 @@ import GenerateEthWallet from "@/app/(root)/ethwallet/GenerateEthWallet";
 import { Input } from "../ui/input";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import { Copy } from "lucide-react";
 
 interface WalletProps {
   wallet: string;
@@ -74,6 +75,17 @@ const GenerateWallet = ({ wallet }: WalletProps) => {
         toast.info("Seed phrase not valid");
       }
     }
+  };
+
+  const handleCopyToClipboard = (mnemonic: string) => {
+    navigator.clipboard
+      .writeText(mnemonic)
+      .then(() => {
+        toast.success("Secret phrase copied to clipboard");
+      })
+      .catch(() => {
+        toast.error("Failed to copy secret phrase");
+      });
   };
 
   return (
@@ -147,7 +159,10 @@ const GenerateWallet = ({ wallet }: WalletProps) => {
               <AccordionTrigger className="text-xl bg-black ">
                 Your Secret Phrase (Solana)
               </AccordionTrigger>
-              <AccordionContent className="bg-black ">
+              <AccordionContent
+                onClick={() => handleCopyToClipboard(solMnemonic)}
+                className="bg-black flex flex-col"
+              >
                 <div className="grid grid-cols-3 gap-2">
                   {solMnemonic.split(" ").map((item) => (
                     <p
@@ -157,6 +172,10 @@ const GenerateWallet = ({ wallet }: WalletProps) => {
                       {item}
                     </p>
                   ))}
+                </div>
+                <div className="flex items-center justify-start gap-1 text-zinc-600 mt-3">
+                  <Copy className="w-4" />
+                  <p>Click anywhere on the phrases to copy.</p>
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -176,7 +195,10 @@ const GenerateWallet = ({ wallet }: WalletProps) => {
               <AccordionTrigger className="text-xl bg-black ">
                 Your Secret Phrase (Ethereum)
               </AccordionTrigger>
-              <AccordionContent className="bg-black ">
+              <AccordionContent
+                onClick={() => handleCopyToClipboard(ethMnemonic)}
+                className="bg-black flex flex-col "
+              >
                 <div className="grid grid-cols-3 gap-2">
                   {ethMnemonic.split(" ").map((item) => (
                     <p
@@ -186,6 +208,10 @@ const GenerateWallet = ({ wallet }: WalletProps) => {
                       {item}
                     </p>
                   ))}
+                </div>
+                <div className="flex items-center justify-start gap-1 text-zinc-600 mt-3">
+                  <Copy className="w-4" />
+                  <p>Click anywhere on the phrases to copy.</p>
                 </div>
               </AccordionContent>
             </AccordionItem>

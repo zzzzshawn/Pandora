@@ -55,7 +55,7 @@ const GenerateEthWallet = ({ mnemonic, setMnemonic }: Props) => {
     setKeypairs(updatedWallets);
     setShowPrivateKey((prevKeys) => [...prevKeys, false]);
     setCurrentIndex((prevIndex) => prevIndex + 1);
-    toast.success('Wallet created')
+    toast.success("Wallet created");
   };
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const GenerateEthWallet = ({ mnemonic, setMnemonic }: Props) => {
 
     setKeypairs(updatedWallets);
     setShowPrivateKey((prevKeys) => prevKeys.filter((_, i) => i !== index));
-    toast.success('Wallet deleted')
+    toast.success("Wallet deleted");
   };
 
   const togglePrivateKeyVisibility = (index: number) => {
@@ -102,6 +102,17 @@ const GenerateEthWallet = ({ mnemonic, setMnemonic }: Props) => {
         onClick: () => clear(),
       },
     });
+  };
+
+  const handleCopyToClipboard = (key: string) => {
+    navigator.clipboard
+      .writeText(key)
+      .then(() => {
+        toast.success("Copied to clipboard");
+      })
+      .catch(() => {
+        toast.error("Failed to copy key");
+      });
   };
 
   return (
@@ -159,12 +170,20 @@ const GenerateEthWallet = ({ mnemonic, setMnemonic }: Props) => {
             </div>
             <div className="my-3 px-3 break-words">
               <p className="text-xl">Public Key:</p>
-              <p className="text-xs">{keypair.publicKey}</p>
+              <p
+                onClick={() => handleCopyToClipboard(keypair.publicKey)}
+                className="text-xs cursor-pointer"
+              >
+                {keypair.publicKey}
+              </p>
             </div>
             <div className="px-3 break-words">
               <p className="text-xl">Private Key:</p>
               <div className="flex justify-between items-start">
-                <p className="text-xs border-none focus:ring-0 word-break: break-all w-[80%]">
+                <p
+                  onClick={() => handleCopyToClipboard(keypair.privateKey)}
+                  className="text-xs border-none focus:ring-0 word-break: break-all w-[80%] cursor-pointer"
+                >
                   {!showPrivateKey[index]
                     ? "*".repeat(keypair.privateKey.length)
                     : keypair.privateKey}

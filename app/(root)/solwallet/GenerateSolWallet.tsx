@@ -59,7 +59,7 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
     setKeypairs((prevKeypairs) => [...prevKeypairs, newKeypair]);
     setShowPrivateKey((prevKeys) => [...prevKeys, false]);
     setCurrentIndex((prevIndex) => prevIndex + 1);
-    toast.success('Wallet created')
+    toast.success("Wallet created");
   };
 
   useEffect(() => {
@@ -81,7 +81,7 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
 
     setKeypairs(updatedWallets);
     setShowPrivateKey((prevKeys) => prevKeys.filter((_, i) => i !== index));
-    toast.success('Wallet deleted')
+    toast.success("Wallet deleted");
   };
 
   const togglePrivateKeyVisibility = (index: number) => {
@@ -99,14 +99,25 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
     setCurrentIndex(0);
   };
 
-  const handleClear = () =>{
-    toast.warning('Are you sure you want to delete all your wallets?',{
+  const handleClear = () => {
+    toast.warning("Are you sure you want to delete all your wallets?", {
       action: {
-        label: 'Delete',
-        onClick: () => clear()
-      }
-    })
-  }
+        label: "Delete",
+        onClick: () => clear(),
+      },
+    });
+  };
+
+  const handleCopyToClipboard = (key: string) => {
+    navigator.clipboard
+      .writeText(key)
+      .then(() => {
+        toast.success("Copied to clipboard");
+      })
+      .catch(() => {
+        toast.error("Failed to copy key");
+      });
+  };
 
   return (
     <div className="w-full flex flex-col gap-5 mt-5">
@@ -133,10 +144,11 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
         </div>
       </motion.div>
       <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay: 0.75 }}
-      className="grid md:grid-cols-2 grid-cols-1 gap-5">
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.75 }}
+        className="grid md:grid-cols-2 grid-cols-1 gap-5"
+      >
         {keypairs.map((keypair, index) => (
           <div
             key={index}
@@ -162,12 +174,20 @@ const GenerateSolWallet = ({ mnemonic, setMnemonic }: Props) => {
             </div>
             <div className="my-3 px-3 break-words">
               <p className="text-xl">Public Key:</p>
-              <p className="text-xs">{keypair.publicKey}</p>
+              <p
+                onClick={() => handleCopyToClipboard(keypair.publicKey)}
+                className="text-xs cursor-pointer"
+              >
+                {keypair.publicKey}
+              </p>
             </div>
             <div className="px-3 break-words">
               <p className="text-xl">Private Key:</p>
               <div className="flex justify-between items-start">
-                <p className="text-xs border-none focus:ring-0 word-break: break-all w-[80%]">
+                <p
+                  onClick={() => handleCopyToClipboard(keypair.privateKey)}
+                  className="text-xs border-none focus:ring-0 word-break: break-all w-[80%] cursor-pointer"
+                >
                   {!showPrivateKey[index]
                     ? "*".repeat(keypair.privateKey.length)
                     : keypair.privateKey}
