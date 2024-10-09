@@ -64,6 +64,7 @@ const GenerateWallet = ({ wallet }: WalletProps) => {
         localStorage.setItem("SolMnemonic", solInput);
         localStorage.setItem("SolWallets", "");
         setSolInput("");
+        setShowMnemonicInput(false);
         toast.success("Seed phrase Valid",{
           duration: 2500
       });
@@ -78,6 +79,7 @@ const GenerateWallet = ({ wallet }: WalletProps) => {
         localStorage.setItem("EthMnemonic", ethInput);
         localStorage.setItem("EthWallets", "");
         setEthInput("");
+        setShowMnemonicInput(false);
         toast.success("Seed phrase Valid",{
           duration: 2500
       });
